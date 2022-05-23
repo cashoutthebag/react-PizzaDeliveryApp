@@ -9,15 +9,19 @@ export const setLoaded = (payload) => {
 
 export const fetchPizzas = (sortBy, category) => (dispatch) => {
   dispatch(setLoaded(false));
-  axios
-    .get(
-      `/pizzas?${category === null ? '' : `category=${category}`}&_sort=${sortBy}&_order=${
-        sortBy === `name` ? `asc` : `desc`
-      }`,
-    )
-    .then(({ data }) => {
-      dispatch(setPizzas(data));
-    });
+  try {
+    axios
+      .get(
+        `/pizzas?${category === null ? '' : `category=${category}`}&_sort=${sortBy}&_order=${
+          sortBy === `name` ? `asc` : `desc`
+        }`,
+      )
+      .then(({ data }) => {
+        dispatch(setPizzas(data));
+      });
+  } catch (error) {
+    console.error(error.response.data);
+  }
 };
 
 export function setPizzas(items) {
